@@ -18,7 +18,8 @@ TEMPLATE = app
 SOURCES += \
     main.cpp \
     samples/canny_detector.cpp \
-    samples/smoothing.cpp
+    samples/smoothing.cpp \
+    samples/laplace.cpp
 
 
 ## OpenCV settings for Unix/Linux
@@ -34,5 +35,6 @@ unix:!mac {
 
 HEADERS += \
     samples/canny_detector.h \
-    samples/smoothing.h
+    samples/smoothing.h \
+    samples/laplace.h
 
