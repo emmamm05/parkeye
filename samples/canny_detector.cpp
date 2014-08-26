@@ -17,12 +17,12 @@ using namespace std;
 Mat cd_src, src_gray;
 Mat cd_dst, detected_edges;
 
-int edgeThresh = 1;
-int lowThreshold;
-int const max_lowThreshold = 100;
-int ratio = 3;
-int kernel_size = 3;
-const char* cd_window_name = "Edge Map";
+int edgeThresh1 = 1;
+int lowThreshold1;
+int const max_lowThreshold1 = 100;
+int ratio1 = 3;
+int kernel_size1 = 3;
+const char* cd_window_name1 = "Edge Map";
 
 /**
  * @function CannyThreshold
@@ -34,13 +34,13 @@ static void CannyThreshold(int, void*)
     blur( src_gray, detected_edges, Size(3,3) );
 
     /// Canny detector
-    Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
+    Canny( detected_edges, detected_edges, lowThreshold1, lowThreshold1*ratio1, kernel_size1 );
 
     /// Using Canny's output as a mask, we display our result
     cd_dst = Scalar::all(0);
 
     cd_src.copyTo( cd_dst, detected_edges);
-    imshow( cd_window_name, cd_dst );
+    imshow( cd_window_name1, cd_dst );
 }
 
 
@@ -62,10 +62,10 @@ int canny_demo( int, char** argv )
   cvtColor( cd_src, src_gray, COLOR_BGR2GRAY );
 
   /// Create a window
-  namedWindow( cd_window_name, WINDOW_AUTOSIZE );
+  namedWindow( cd_window_name1, WINDOW_AUTOSIZE );
 
   /// Create a Trackbar for user to enter threshold
-  createTrackbar( "Min Threshold:", cd_window_name, &lowThreshold, max_lowThreshold, CannyThreshold );
+  createTrackbar( "Min Threshold:", cd_window_name1, &lowThreshold1, max_lowThreshold1, CannyThreshold );
 
   /// Show the image
   CannyThreshold(0, 0);

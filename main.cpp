@@ -1,4 +1,5 @@
 #include "samples/canny_detector.h"
+#include "samples/background_subtraction.h"
 #include "samples/smoothing.h"
 #include "samples/laplace.h"
 
@@ -12,5 +13,7 @@ int main( int argc, char** argv )
    //demo del algoritmo de canny detection para encontrar bordes
    //canny_demo(argc,argv);
 
-   laplace_demo(argc,argv);
+   //laplace_demo(argc,argv);
+
+   subtration_demo(argc,argv);
 }
