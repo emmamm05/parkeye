@@ -31,6 +31,9 @@ void MainWindow::on_fileBttnParking_clicked()
     //Visualizar Imagen
     ui->lineParking->setText(fileName);
     ui->imgParking->setPixmap(QPixmap::fromImage(image));
+
+    //Resetear estado
+    Constants::STEP_STATE = Constants::RAW;
 }
 
 void MainWindow::on_fileBttnReference_clicked()
@@ -48,12 +51,21 @@ void MainWindow::on_bttnStep_clicked()
 
     switch(Constants::STEP_STATE){
         case Constants::RAW:
+            qDebug() << "###RAW###";
             strategy->processBlur();
             image.load(Constants::IMG_BLUR);
+            Constants::STEP_STATE = Constants::BLUR;
             break;
         case Constants::BLUR:
+            qDebug() << "###BLUR###";
             strategy->processLaplacian();
             image.load(Constants::IMG_LAPLACE);
+            Constants::STEP_STATE = Constants::LAPLACE;
+            break;
+        case Constants::LAPLACE:
+            qDebug() << "###LAPLACIAN###";
+            strategy->processEdge();
+            image.load(Constants::IMG_EDGES);
             break;
     }
 

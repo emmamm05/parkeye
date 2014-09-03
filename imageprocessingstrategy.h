@@ -15,10 +15,10 @@ public:
     Mat applyLaplacian(Mat src);
     Mat applyEdge(Mat src);
     Mat applySubs(Mat src, Mat ref);
-    void processBlur();
-    void processLaplacian();
-    void processEdge();
-    void processSubs();
+    int processBlur();
+    int processLaplacian();
+    int processEdge();
+    int processSubs();
 };
 
 #endif // IMAGEPROCESSINGSTRATEGY_H
