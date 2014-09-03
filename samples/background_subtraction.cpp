@@ -53,8 +53,8 @@ static void CannyThreshold(int, void*)
 int subtration_demo( int, char** argv )
 {
   /// Load an image
-  cd_src1 = imread("/home/bairon/workspace/parkeye/assets/parking1.jpg");
-  cd_src2 = imread("/home/bairon/workspace/parkeye/assets/parking3.jpg");
+    cd_src1 = imread(argv[1]);
+    cd_src2 = imread(argv[2]);
 
   if( !cd_src1.data && !cd_src2.data )
     { return -1; }

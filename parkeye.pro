@@ -6,8 +6,6 @@
 
 QT       += core
 
-QT       -= gui
-
 TARGET = parkeye
 CONFIG   += console
 CONFIG   -= app_bundle
@@ -19,7 +17,11 @@ SOURCES += \
     main.cpp \
     samples/canny_detector.cpp \
     samples/smoothing.cpp \
-    samples/laplace.cpp
+    samples/laplace.cpp \
+    samples/background_subtraction.cpp \
+    mainwindow.cpp \
+    imageprocessingstrategy.cpp \
+    constants.cpp
 
 
 ## OpenCV settings for Unix/Linux
@@ -36,5 +38,12 @@ unix:!mac {
 HEADERS += \
     samples/canny_detector.h \
     samples/smoothing.h \
-    samples/laplace.h
+    samples/laplace.h \
+    samples/background_subtraction.h \
+    mainwindow.h \
+    imageprocessingstrategy.h \
+    constants.h
+
+FORMS += \
+    mainwindow.ui
 
