@@ -5,4 +5,4 @@ const char *Constants::IMG_BLUR = "blur.jpg";
 const char *Constants::IMG_LAPLACE = "laplace.jpg";
 const char *Constants::IMG_EDGES = "edges.jpg";
 const char *Constants::IMG_SUBS = "subs.jpg";
-Constants::STATES Constants::STEP_STATE = Constants::RAW;
+Constants::STATES Constants::STEP_STATE = Constants::PRE;

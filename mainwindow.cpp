@@ -4,6 +4,7 @@
 #include "QDebug"
 #include <QPicture>
 #include "imageprocessingstrategy.h"
+#include "QMessageBox"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,18 +23,8 @@ void MainWindow::on_fileBttnParking_clicked()
     //Dialogo para abrir la ubicación de la foto del parqueo a probar
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"~/",tr("Mp3 Files (*.jpg)"));
     qDebug() << fileName;
-    Constants::IMG_RAW = const_cast<char *>(fileName.toStdString().c_str());
 
-    //Cargar Imagen
-    QImage image;
-    image.load(fileName);
-
-    //Visualizar Imagen
     ui->lineParking->setText(fileName);
-    ui->imgParking->setPixmap(QPixmap::fromImage(image));
-
-    //Resetear estado
-    Constants::STEP_STATE = Constants::RAW;
 }
 
 void MainWindow::on_fileBttnReference_clicked()
@@ -50,6 +41,16 @@ void MainWindow::on_bttnStep_clicked()
     QImage image;
 
     switch(Constants::STEP_STATE){
+        case Constants::PRE:
+            qDebug() << "###PRE###";
+            //Resetear estado
+            Constants::IMG_RAW = const_cast<char *>(ui->lineParking->text().toStdString().c_str());
+            QFile::remove(QString(Constants::BLUR));
+            QFile::remove(QString(Constants::LAPLACE));
+            QFile::remove(QString(Constants::EDGES));
+            image.load(Constants::IMG_RAW);
+            Constants::STEP_STATE = Constants::RAW;
+            break;
         case Constants::RAW:
             qDebug() << "###RAW###";
             strategy->processBlur();
@@ -66,8 +67,26 @@ void MainWindow::on_bttnStep_clicked()
             qDebug() << "###LAPLACIAN###";
             strategy->processEdge();
             image.load(Constants::IMG_EDGES);
+            Constants::STEP_STATE = Constants::EDGES;
+            ui->bttnStep->setEnabled(false);
+            break;
+        case Constants::EDGES:
+            qDebug() << "###EDGES###";
             break;
     }
 
     ui->imgParking->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::showErrorMessage(){
+    QMessageBox msgBox;
+     msgBox.setText("Se detecto un problema al abrir la imagen, por favor intente de nuevo");
+     msgBox.exec();
+}
+
+void MainWindow::on_bttnRestart_clicked()
+{
+    ui->bttnStep->setEnabled(true);
+    Constants::STEP_STATE = Constants::PRE;
+    on_bttnStep_clicked();
 }

@@ -124,6 +124,19 @@
      <string>Step</string>
     </property>
    </widget>
+   <widget class="QCommandLinkButton" name="bttnRestart">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>20</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Restart</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

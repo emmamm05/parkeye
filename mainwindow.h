@@ -22,8 +22,11 @@ private slots:
 
     void on_bttnStep_clicked();
 
+    void on_bttnRestart_clicked();
+
 private:
     Ui::MainWindow *ui;
+    void showErrorMessage();
 };
 
 #endif // MAINWINDOW_H
