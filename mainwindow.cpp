@@ -11,6 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    QFile raw(Constants::IMG_RAW);
+    QFile ref(Constants::IMG_REF);
+    if ( raw.exists() && ref.exists() ){
+        on_bttnStep_clicked();
+        ui->lineParking->setText(Constants::IMG_RAW);
+        ui->lineReference->setText(Constants::IMG_REF);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -23,8 +30,10 @@ void MainWindow::on_fileBttnParking_clicked()
     //Dialogo para abrir la ubicación de la foto del parqueo a probar
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"~/",tr("Mp3 Files (*.jpg)"));
     qDebug() << fileName;
-
     ui->lineParking->setText(fileName);
+
+    QFile raw_image(fileName);
+    raw_image.copy(Constants::IMG_RAW);
 }
 
 void MainWindow::on_fileBttnReference_clicked()
@@ -33,6 +42,9 @@ void MainWindow::on_fileBttnReference_clicked()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),"~/",tr("Mp3 Files (*.jpg)"));
     qDebug() << fileName;
     ui->lineReference->setText(fileName);
+
+    QFile ref_image(fileName);
+    ref_image.copy(Constants::IMG_REF);
 }
 
 void MainWindow::on_bttnStep_clicked()

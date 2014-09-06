@@ -43,7 +43,7 @@ Mat ImageProcessingStrategy::applyContourns(Mat src){
 
     cvtColor( src, src_gray, CV_BGR2GRAY );
     // Eliminar ruido
-    blur( src_gray, src2, Size(5,5) );
+    src2 = applyBlur(src_gray);
     findContours( src2, contours, hierarchy,CV_CHAIN_APPROX_SIMPLE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
     // iterate through all the top-level contours,
@@ -81,13 +81,13 @@ Mat ImageProcessingStrategy::applyContourns(Mat src){
 
 int ImageProcessingStrategy::processBlur(){
     //Raw Image
-    Mat src = imread( Constants::IMG_RAW );
+    Mat src = imread( Constants::IMG_RAW_LAPLACE );
     if (!src.data) return 1;
     Mat dst = applyBlur(src);
     imwrite( Constants::IMG_RAW_BLUR, dst );
 
     //Ref Image
-    src = imread( Constants::IMG_REF );
+    src = imread( Constants::IMG_REF_LAPLACE );
     if (!src.data) return 1;
     dst = applyBlur(src);
     imwrite( Constants::IMG_REF_BLUR, dst );
