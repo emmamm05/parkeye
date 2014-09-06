@@ -25,7 +25,7 @@ public:
     static const int EDGES_RATIO = 3;
     static const int EDGES_KERNEL_SIZE = 3;
     enum STATES{
-        PRE, RAW, BLUR, LAPLACE,EDGES,SUBS
+        PRE, RAW, BLUR, LAPLACE,EDGES,SUBS,CONTOURNS
     };
     static  STATES STEP_STATE;
 };

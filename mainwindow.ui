@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>713</width>
+    <width>1365</width>
     <height>688</height>
    </rect>
   </property>
@@ -92,7 +92,7 @@
      <string>...</string>
     </property>
    </widget>
-   <widget class="QLabel" name="imgParking">
+   <widget class="QLabel" name="imgRaw">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -137,13 +137,32 @@
      <string>Restart</string>
     </property>
    </widget>
+   <widget class="QLabel" name="imgRef">
+    <property name="geometry">
+     <rect>
+      <x>690</x>
+      <y>100</y>
+      <width>651</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 127);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>713</width>
+     <width>1365</width>
      <height>19</height>
     </rect>
    </property>

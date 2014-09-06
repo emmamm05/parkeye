@@ -38,7 +38,7 @@ void MainWindow::on_fileBttnReference_clicked()
 void MainWindow::on_bttnStep_clicked()
 {
     ImageProcessingStrategy* strategy = new ImageProcessingStrategy();
-    QImage image;
+    QImage imageRaw, imageRef;
 
     switch(Constants::STEP_STATE){
         case Constants::PRE:
@@ -48,8 +48,9 @@ void MainWindow::on_bttnStep_clicked()
             QFile::remove(QString(Constants::BLUR));
             QFile::remove(QString(Constants::LAPLACE));
             QFile::remove(QString(Constants::EDGES));
-            image.load(Constants::IMG_RAW);
-            qDebug() << image.bits();
+            imageRaw.load(Constants::IMG_RAW);
+            imageRef.load(Constants::IMG_REF);
+            qDebug() << imageRaw.bits();
             qDebug() << Constants::IMG_RAW;
             //next state
             Constants::STEP_STATE = Constants::RAW;
@@ -57,35 +58,40 @@ void MainWindow::on_bttnStep_clicked()
         case Constants::RAW:
             qDebug() << "###RAW###";
             if (strategy->processBlur()) showErrorMessage();
-            image.load(Constants::IMG_RAW_BLUR);
+            imageRaw.load(Constants::IMG_RAW_BLUR);
+            imageRef.load(Constants::IMG_REF_BLUR);
             //next state
             Constants::STEP_STATE = Constants::BLUR;
             break;
         case Constants::BLUR:
             qDebug() << "###BLUR###";
             strategy->processLaplacian();
-            image.load(Constants::IMG_RAW_LAPLACE);
+            imageRaw.load(Constants::IMG_RAW_LAPLACE);
+            imageRef.load(Constants::IMG_REF_LAPLACE);
             //next state
             Constants::STEP_STATE = Constants::LAPLACE;
             break;
         case Constants::LAPLACE:
             qDebug() << "###LAPLACIAN###";
             strategy->processEdge();
-            image.load(Constants::IMG_RAW_EDGES);
+            imageRaw.load(Constants::IMG_RAW_EDGES);
+            imageRef.load(Constants::IMG_REF_EDGES);
             //next state
             Constants::STEP_STATE = Constants::EDGES;
             break;
         case Constants::EDGES:
             qDebug() << "###EDGES###";
             strategy->processSubs();
-            image.load( Constants::IMG_SUBS );
+            imageRaw.load( Constants::IMG_SUBS );
+            imageRef.allGray();
             ui->bttnStep->setEnabled(false);
             //next state
             Constants::STEP_STATE = Constants::SUBS;
             break;
     }
 
-    ui->imgParking->setPixmap(QPixmap::fromImage(image));
+    ui->imgRaw->setPixmap(QPixmap::fromImage(imageRaw));
+    ui->imgRef->setPixmap(QPixmap::fromImage(imageRef));
 }
 
 void MainWindow::showErrorMessage(){
