@@ -24,7 +24,7 @@ public:
     static const int EDGES_LOW_THRESHOLD = 70;
     static const int EDGES_RATIO = 3;
     static const int EDGES_KERNEL_SIZE = 3;
-    static const int CONTOURS_MIN_CONTOURS = 15;
+    static const int CONTOURS_MIN_CONTOURS = 20;
     enum STATES{
         PRE, RAW, BLUR, LAPLACE,EDGES,SUBS,CONTOURNS
     };
