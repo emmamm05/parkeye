@@ -14,11 +14,13 @@ public:
     Mat applyBlur(Mat src);
     Mat applyLaplacian(Mat src);
     Mat applyEdge(Mat src);
-    Mat applySubs(Mat src, Mat ref);
+    Mat applySubs(Mat raw_src, Mat ref_src);
+    Mat applyContourns(Mat src);
     int processBlur();
     int processLaplacian();
     int processEdge();
     int processSubs();
+    int processContourns();
 };
 
 #endif // IMAGEPROCESSINGSTRATEGY_H

@@ -6,11 +6,16 @@
 class Constants
 {
 public:
-    static char* IMG_RAW;
-    static const char* IMG_BLUR;
-    static const char* IMG_LAPLACE;
-    static const char* IMG_EDGES;
+    static const char* IMG_RAW;
+    static const char* IMG_REF;
+    static const char* IMG_RAW_BLUR;
+    static const char* IMG_RAW_LAPLACE;
+    static const char* IMG_RAW_EDGES;
+    static const char* IMG_REF_BLUR;
+    static const char* IMG_REF_LAPLACE;
+    static const char* IMG_REF_EDGES;
     static const char* IMG_SUBS;
+    static const char* IMG_CONTOURNS;
     static const int BLUR_KERNEL_LENGTH = 5;
     static const int LAPLACE_KERNEL_SIZE = 3;
     static const int LAPLACE_SCALE = 1;
