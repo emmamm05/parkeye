@@ -41,52 +41,48 @@ void MainWindow::on_bttnStep_clicked()
     QImage imageRaw, imageRef;
 
     switch(Constants::STEP_STATE){
-        case Constants::PRE:
-            qDebug() << "###PRE###";
-            //Resetear estado
+        case Constants::RAW:
             //Constants::IMG_RAW = const_cast<char *>(ui->lineParking->text().toStdString().c_str());
-            QFile::remove(QString(Constants::BLUR));
-            QFile::remove(QString(Constants::LAPLACE));
-            QFile::remove(QString(Constants::EDGES));
             imageRaw.load(Constants::IMG_RAW);
             imageRef.load(Constants::IMG_REF);
             qDebug() << imageRaw.bits();
             qDebug() << Constants::IMG_RAW;
             //next state
-            Constants::STEP_STATE = Constants::RAW;
+            Constants::STEP_STATE = Constants::LAPLACE;
             break;
-        case Constants::RAW:
-            qDebug() << "###RAW###";
+        case Constants::BLUR:
             if (strategy->processBlur()) showErrorMessage();
             imageRaw.load(Constants::IMG_RAW_BLUR);
             imageRef.load(Constants::IMG_REF_BLUR);
             //next state
-            Constants::STEP_STATE = Constants::BLUR;
+            Constants::STEP_STATE = Constants::SUBS;
             break;
-        case Constants::BLUR:
-            qDebug() << "###BLUR###";
+        case Constants::LAPLACE:
             strategy->processLaplacian();
             imageRaw.load(Constants::IMG_RAW_LAPLACE);
             imageRef.load(Constants::IMG_REF_LAPLACE);
             //next state
-            Constants::STEP_STATE = Constants::LAPLACE;
-            break;
-        case Constants::LAPLACE:
-            qDebug() << "###LAPLACIAN###";
-            strategy->processEdge();
-            imageRaw.load(Constants::IMG_RAW_EDGES);
-            imageRef.load(Constants::IMG_REF_EDGES);
-            //next state
-            Constants::STEP_STATE = Constants::EDGES;
+            Constants::STEP_STATE = Constants::BLUR;
             break;
         case Constants::EDGES:
-            qDebug() << "###EDGES###";
+            strategy->processEdge();
+            imageRaw.load(Constants::IMG_EDGES);
+            imageRef.allGray();
+            //next state
+            Constants::STEP_STATE = Constants::CONTOURNS;
+            break;
+        case Constants::SUBS:
             strategy->processSubs();
             imageRaw.load( Constants::IMG_SUBS );
             imageRef.allGray();
-            ui->bttnStep->setEnabled(false);
             //next state
-            Constants::STEP_STATE = Constants::SUBS;
+            Constants::STEP_STATE = Constants::EDGES;
+            break;
+        case Constants::CONTOURNS:
+            strategy->processContourns();
+            imageRaw.load( Constants::IMG_CONTOURNS );
+            imageRef.load(Constants::IMG_FINAL);
+            ui->bttnStep->setEnabled(false);
             break;
     }
 
@@ -103,6 +99,6 @@ void MainWindow::showErrorMessage(){
 void MainWindow::on_bttnRestart_clicked()
 {
     ui->bttnStep->setEnabled(true);
-    Constants::STEP_STATE = Constants::PRE;
+    Constants::STEP_STATE = Constants::RAW;
     on_bttnStep_clicked();
 }

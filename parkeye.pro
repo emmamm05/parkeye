@@ -21,7 +21,8 @@ SOURCES += \
     samples/background_subtraction.cpp \
     mainwindow.cpp \
     imageprocessingstrategy.cpp \
-    constants.cpp
+    constants.cpp \
+    samples/contours.cpp
 
 
 ## OpenCV settings for Unix/Linux
@@ -42,7 +43,8 @@ HEADERS += \
     samples/background_subtraction.h \
     mainwindow.h \
     imageprocessingstrategy.h \
-    constants.h
+    constants.h \
+    samples/contours.h
 
 FORMS += \
     mainwindow.ui

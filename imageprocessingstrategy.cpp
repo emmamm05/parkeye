@@ -1,6 +1,7 @@
 #include "imageprocessingstrategy.h"
 #include "constants.h"
 #include "QDebug"
+#include <math.h>
 
 ImageProcessingStrategy::ImageProcessingStrategy()
 {
@@ -32,9 +33,51 @@ Mat ImageProcessingStrategy::applySubs(Mat raw_src, Mat ref_src){
 }
 
 Mat ImageProcessingStrategy::applyContourns(Mat src){
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
+    RNG rng(12345);
+    Mat src2 = src.clone();
     Mat dst = src.clone();
+    Mat src_gray = src.clone();
+    Mat final = imread(Constants::IMG_RAW);
 
+    cvtColor( src, src_gray, CV_BGR2GRAY );
+    // Eliminar ruido
+    blur( src_gray, src2, Size(5,5) );
+    findContours( src2, contours, hierarchy,CV_CHAIN_APPROX_SIMPLE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+
+    // iterate through all the top-level contours,
+       // draw each connected component with its own random color
+//       int idx = 0;
+//       for( ; idx >= 0; idx = hierarchy[idx][0] )
+//       {
+//           Scalar color( rand()&255, rand()&255, rand()&255 );
+//           drawContours( dst, contours, idx, color, CV_FILLED, 1, hierarchy );
+//       }
+
+    qDebug() << contours.data();
+    // Rotar los rectangulos buscando el area minima
+    vector<RotatedRect> minRect( contours.size() );
+    for( int i = 0; i < contours.size(); i++ ){
+         minRect[i] = minAreaRect( Mat(contours[i]) );
+     }
+
+    //  Dibujar rectangulos
+     Scalar color = Scalar( rng.uniform(0,0), rng.uniform(250,250), rng.uniform(0,0) );
+     for( int i = 0; i< contours.size(); i++ ){
+         Point2f rect_points[4]; minRect[i].points( rect_points );
+         for(int j = 0; j < 4; j++ ){
+           if( pow(rect_points[j].x-(rect_points[(j+1)%4]).x, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2) &&
+                pow(rect_points[j].y-(rect_points[(j+1)%4]).y, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2) ){
+                line( dst, rect_points[j], rect_points[(j+1)%4], color, 2, 8 );
+                line( final, rect_points[j], rect_points[(j+1)%4], color, 2, 8 );
+            }
+         }
+     }
+     imwrite(Constants::IMG_FINAL,final);
+    return dst;
 }
+
 
 int ImageProcessingStrategy::processBlur(){
     //Raw Image
@@ -53,13 +96,13 @@ int ImageProcessingStrategy::processBlur(){
 
 int ImageProcessingStrategy::processLaplacian(){
     //Raw Image
-    Mat src = imread( Constants::IMG_RAW_BLUR );
+    Mat src = imread( Constants::IMG_RAW );
     if (!src.data) return 1;
     Mat dst = applyLaplacian(src);
     imwrite( Constants::IMG_RAW_LAPLACE, dst );
 
     //Ref Image
-    src = imread( Constants::IMG_REF_BLUR );
+    src = imread( Constants::IMG_REF );
     if (!src.data) return 1;
     dst = applyLaplacian(src);
     imwrite( Constants::IMG_REF_LAPLACE, dst );
@@ -67,28 +110,24 @@ int ImageProcessingStrategy::processLaplacian(){
 }
 
 int ImageProcessingStrategy::processEdge(){
-    //Raw Image
-     Mat src = imread( Constants::IMG_RAW_LAPLACE );
+     Mat src = imread( Constants::IMG_SUBS );
      if (!src.data) return 1;
      Mat dst = applyEdge(src);
-     imwrite( Constants::IMG_RAW_EDGES, dst );
-
-     //Ref Image
-     src = imread( Constants::IMG_REF_LAPLACE );
-     if (!src.data) return 1;
-     dst = applyEdge(src);
-     imwrite( Constants::IMG_REF_EDGES, dst );
+     imwrite( Constants::IMG_EDGES, dst );
     return 0;
 }
 
 int ImageProcessingStrategy::processSubs(){
-    Mat src_raw = imread( Constants::IMG_RAW_EDGES );
-    Mat src_ref = imread( Constants::IMG_REF_EDGES );
+    Mat src_raw = imread( Constants::IMG_RAW_BLUR );
+    Mat src_ref = imread( Constants::IMG_REF_BLUR );
     if (!src_raw.data || !src_ref.data) return 1;
     Mat dst = applySubs(src_raw,src_ref);
     imwrite( Constants::IMG_SUBS, dst );
 }
 
 int ImageProcessingStrategy::processContourns(){
-
+    Mat src = imread( Constants::IMG_EDGES );
+    if (!src.data) return 1;
+    Mat dst = applyContourns(src);
+    imwrite( Constants::IMG_CONTOURNS, dst );
 }
