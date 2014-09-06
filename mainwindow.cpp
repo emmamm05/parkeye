@@ -56,11 +56,8 @@ void MainWindow::on_bttnStep_clicked()
 
     switch(Constants::STEP_STATE){
         case Constants::RAW:
-            //Constants::IMG_RAW = const_cast<char *>(ui->lineParking->text().toStdString().c_str());
             imageRaw.load(Constants::IMG_RAW);
             imageRef.load(Constants::IMG_REF);
-            qDebug() << imageRaw.bits();
-            qDebug() << Constants::IMG_RAW;
             //next state
             Constants::STEP_STATE = Constants::LAPLACE;
             break;
@@ -101,7 +98,7 @@ void MainWindow::on_bttnStep_clicked()
     }
 
 
-    ui->imgRaw->setPixmap(QPixmap::fromImage(imageRaw.scaled(ui->imgRaw->width(),ui->imgRaw->height())));
+    ui->imgRaw->setPixmap(QPixmap::fromImage( imageRaw.scaled(ui->imgRaw->width(),ui->imgRaw->height())));
     ui->imgRef->setPixmap(QPixmap::fromImage( imageRef.scaled(ui->imgRef->width(),ui->imgRef->height())));
 }
 

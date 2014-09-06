@@ -120,9 +120,9 @@
    <widget class="QCommandLinkButton" name="bttnStep">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>20</y>
-      <width>71</width>
+      <x>1240</x>
+      <y>50</y>
+      <width>101</width>
       <height>41</height>
      </rect>
     </property>
@@ -133,8 +133,8 @@
    <widget class="QCommandLinkButton" name="bttnRestart">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>20</y>
+      <x>1240</x>
+      <y>0</y>
       <width>101</width>
       <height>41</height>
      </rect>
