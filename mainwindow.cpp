@@ -33,6 +33,7 @@ void MainWindow::on_fileBttnParking_clicked()
     ui->lineParking->setText(fileName);
 
     QFile raw_image(fileName);
+    QFile::remove(Constants::IMG_RAW);
     raw_image.copy(Constants::IMG_RAW);
 }
 
@@ -44,6 +45,7 @@ void MainWindow::on_fileBttnReference_clicked()
     ui->lineReference->setText(fileName);
 
     QFile ref_image(fileName);
+    QFile::remove(Constants::IMG_REF);
     ref_image.copy(Constants::IMG_REF);
 }
 
@@ -98,8 +100,9 @@ void MainWindow::on_bttnStep_clicked()
             break;
     }
 
-    ui->imgRaw->setPixmap(QPixmap::fromImage(imageRaw));
-    ui->imgRef->setPixmap(QPixmap::fromImage(imageRef));
+
+    ui->imgRaw->setPixmap(QPixmap::fromImage(imageRaw.scaled(ui->imgRaw->width(),ui->imgRaw->height())));
+    ui->imgRef->setPixmap(QPixmap::fromImage( imageRef.scaled(ui->imgRef->width(),ui->imgRef->height())));
 }
 
 void MainWindow::showErrorMessage(){
