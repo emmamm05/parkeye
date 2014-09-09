@@ -66,9 +66,11 @@ Mat ImageProcessingStrategy::applyContourns(Mat src){
      Scalar color = Scalar( rng.uniform(0,0), rng.uniform(250,250), rng.uniform(0,0) );
      for( int i = 0; i< contours.size(); i++ ){
          Point2f rect_points[4]; minRect[i].points( rect_points );
-         for(int j = 0; j < 4; j++ ){
-           if( pow(rect_points[j].x-(rect_points[(j+1)%4]).x, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2) &&
-                pow(rect_points[j].y-(rect_points[(j+1)%4]).y, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2) ){
+
+         if( pow(rect_points[0].x-(rect_points[1]).x, 2) + pow(rect_points[0].y-(rect_points[1]).y, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2) &&
+             pow(rect_points[1].x-(rect_points[2]).x, 2) + pow(rect_points[1].y-(rect_points[2]).y, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2))
+             {
+            for(int j = 0; j < 4; j++ ){
                 line( dst, rect_points[j], rect_points[(j+1)%4], color, 2, 8 );
                 line( final, rect_points[j], rect_points[(j+1)%4], color, 2, 8 );
             }
