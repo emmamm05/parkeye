@@ -8,8 +8,12 @@
 //pasar como argumento el path completo de la imagen lana.jpg
 int main( int argc, char** argv )
 {
-    QApplication a(argc, argv);
-    MainWindow m;
-    m.show();
-    return a.exec();
+    //QApplication a(argc, argv);
+    //MainWindow m;
+    //m.show();
+    //return a.exec();
+    on_bttnStep_clicked();
+    on_bttnStep_clicked();
+    on_bttnStep_clicked();
+    on_bttnStep_clicked();
 }
