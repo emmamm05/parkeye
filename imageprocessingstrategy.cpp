@@ -9,7 +9,15 @@ ImageProcessingStrategy::ImageProcessingStrategy()
 
 Mat ImageProcessingStrategy::applyBlur(Mat src){
     Mat dst = src.clone();
+
+    /* cv::Mat --> cv::ocl::oclMat */
+    //ocl::oclMat oclmat_src(src);
+    //ocl::oclMat oclmat_dst;
+
     GaussianBlur( src, dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
+
+    /* cv::Mat <-- cv::ocl::oclMat */
+    //oclmat_dst.download(dst);
     return dst;
 }
 
@@ -22,7 +30,7 @@ Mat ImageProcessingStrategy::applyLaplacian(Mat src){
 
 Mat ImageProcessingStrategy::applyEdge(Mat src){
     Mat dst = src.clone();
-   Canny( src, dst, Constants::EDGES_LOW_THRESHOLD, Constants::EDGES_LOW_THRESHOLD*Constants::EDGES_RATIO, Constants::EDGES_KERNEL_SIZE );
+    Canny( src, dst, Constants::EDGES_LOW_THRESHOLD, Constants::EDGES_LOW_THRESHOLD*Constants::EDGES_RATIO, Constants::EDGES_KERNEL_SIZE );
     return dst;
 }
 
@@ -67,8 +75,8 @@ Mat ImageProcessingStrategy::applyContourns(Mat src){
      for( int i = 0; i< contours.size(); i++ ){
          Point2f rect_points[4]; minRect[i].points( rect_points );
 
-         if( pow(rect_points[0].x-(rect_points[1]).x, 2) + pow(rect_points[0].y-(rect_points[1]).y, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2) &&
-             pow(rect_points[1].x-(rect_points[2]).x, 2) + pow(rect_points[1].y-(rect_points[2]).y, 2) > pow(Constants::CONTOURS_MIN_CONTOURS, 2))
+         if( pow((int)(rect_points[0].x-(rect_points[1]).x), 2.0) + pow((int)(rect_points[0].y-(rect_points[1]).y), 2.0) > pow(Constants::CONTOURS_MIN_CONTOURS, 2.0) &&
+             pow((int)(rect_points[1].x-(rect_points[2]).x), 2.0) + pow((int)(rect_points[1].y-(rect_points[2]).y), 2.0) > pow(Constants::CONTOURS_MIN_CONTOURS, 2.0))
              {
             for(int j = 0; j < 4; j++ ){
                 line( dst, rect_points[j], rect_points[(j+1)%4], color, 2, 8 );
