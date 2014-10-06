@@ -19,7 +19,6 @@ SOURCES += \
     samples/smoothing.cpp \
     samples/laplace.cpp \
     samples/background_subtraction.cpp \
-    mainwindow.cpp \
     imageprocessingstrategy.cpp \
     constants.cpp \
     samples/contours.cpp
@@ -41,7 +40,6 @@ HEADERS += \
     samples/smoothing.h \
     samples/laplace.h \
     samples/background_subtraction.h \
-    mainwindow.h \
     imageprocessingstrategy.h \
     constants.h \
     samples/contours.h
