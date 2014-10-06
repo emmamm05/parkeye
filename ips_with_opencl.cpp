@@ -1,5 +1,7 @@
 #include "ips_with_opencl.h"
 
+struct timespec startOcl, stopOcl;
+
 IPS_with_opencl::IPS_with_opencl()
 {
 }
@@ -12,7 +14,11 @@ Mat IPS_with_opencl::applyBlur(Mat src){
     ocl::oclMat oclmat_src(src);
     ocl::oclMat oclmat_dst;
 
+    clock_gettime( CLOCK_REALTIME, &startOcl);
     ocl::GaussianBlur( oclmat_src, oclmat_dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
+    clock_gettime( CLOCK_REALTIME, &stopOcl);
+    double elapsedStep = (double)( stopOcl.tv_sec - startOcl.tv_sec )+ ( stopOcl.tv_nsec - startOcl.tv_nsec );
+    printf("Tiempo de ejecucion de GaussianBlur:\t%f\tns \n", std::abs(elapsedStep) );
 
     /* cv::Mat <-- cv::ocl::oclMat */
     oclmat_dst.download(dst);
@@ -26,9 +32,12 @@ Mat IPS_with_opencl::applyLaplacian(Mat src){
     ocl::oclMat oclmat_src(src);
     ocl::oclMat oclmat_dst;
 
+    clock_gettime( CLOCK_REALTIME, &startOcl);
     Laplacian( oclmat_src, oclmat_dst, Constants::LAPLACE_DDEPTH, Constants::LAPLACE_KERNEL_SIZE, Constants::LAPLACE_SCALE,
                Constants::LAPLACE_DELTA, BORDER_DEFAULT );
-
+    clock_gettime( CLOCK_REALTIME, &stopOcl);
+    double elapsedStep = (double)( stopOcl.tv_sec - startOcl.tv_sec )+ ( stopOcl.tv_nsec - startOcl.tv_nsec );
+    printf("Tiempo de ejecucion de Laplacian:\t%f\tns \n", std::abs(elapsedStep) );
 
     /* cv::Mat <-- cv::ocl::oclMat */
     oclmat_dst.download(dst);
