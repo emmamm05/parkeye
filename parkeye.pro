@@ -28,11 +28,9 @@ SOURCES += \
 unix:!mac {
     message("* Using settings for Unix/Linux.")
     INCLUDEPATH += /usr/local/include/opencv
+    INCLUDEPATH += /usr/local/include/opencv2
 
-    LIBS += -L/usr/local/lib/ \
-        -lopencv_core \
-        -lopencv_highgui \
-        -lopencv_imgproc
+    LIBS += `pkg-config opencv --cflags --libs`
 }
 
 HEADERS += \

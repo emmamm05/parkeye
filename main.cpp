@@ -58,6 +58,21 @@ void step(){
 //pasar como argumento el path completo de la imagen lana.jpg
 int main( int argc, char** argv )
 {
+
+
+    printf("Begin creating ocl context...\n");
+
+    /* Platform Info */
+    cv::ocl::PlatformsInfo plat_info;
+    cv::ocl::getOpenCLPlatforms( plat_info );
+
+    /* initialise of ocl */
+    ocl::DevicesInfo param;
+    ocl::getOpenCLDevices(param);
+
+    ocl::setDevice(param[0]);
+    printf("End creating ocl context...\n");
+
     printf("inicio de la ejecucion\n");
     clock_t start = clock();
     int i;
