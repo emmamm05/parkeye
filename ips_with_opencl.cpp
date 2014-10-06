@@ -1,40 +1,54 @@
-#include "imageprocessingstrategy.h"
-#include "constants.h"
-#include "QDebug"
-#include <math.h>
+#include "ips_with_opencl.h"
 
-ImageProcessingStrategy::ImageProcessingStrategy()
+IPS_with_opencl::IPS_with_opencl()
 {
 }
 
-Mat ImageProcessingStrategy::applyBlur(Mat src){
+
+Mat IPS_with_opencl::applyBlur(Mat src){
     Mat dst = src.clone();
 
-    GaussianBlur( src, dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
+    /* cv::Mat --> cv::ocl::oclMat */
+    ocl::oclMat oclmat_src(src);
+    ocl::oclMat oclmat_dst;
 
+    ocl::GaussianBlur( oclmat_src, oclmat_dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
+
+    /* cv::Mat <-- cv::ocl::oclMat */
+    oclmat_dst.download(dst);
     return dst;
 }
 
-Mat ImageProcessingStrategy::applyLaplacian(Mat src){
+Mat IPS_with_opencl::applyLaplacian(Mat src){
     Mat dst = src.clone();
-    Laplacian( src, dst, Constants::LAPLACE_DDEPTH, Constants::LAPLACE_KERNEL_SIZE, Constants::LAPLACE_SCALE,
+
+    /* cv::Mat --> cv::ocl::oclMat */
+    ocl::oclMat oclmat_src(src);
+    ocl::oclMat oclmat_dst;
+
+    Laplacian( oclmat_src, oclmat_dst, Constants::LAPLACE_DDEPTH, Constants::LAPLACE_KERNEL_SIZE, Constants::LAPLACE_SCALE,
                Constants::LAPLACE_DELTA, BORDER_DEFAULT );
+
+
+    /* cv::Mat <-- cv::ocl::oclMat */
+    oclmat_dst.download(dst);
+
     return dst;
 }
 
-Mat ImageProcessingStrategy::applyEdge(Mat src){
+Mat IPS_with_opencl::applyEdge(Mat src){
     Mat dst = src.clone();
     Canny( src, dst, Constants::EDGES_LOW_THRESHOLD, Constants::EDGES_LOW_THRESHOLD*Constants::EDGES_RATIO, Constants::EDGES_KERNEL_SIZE );
     return dst;
 }
 
-Mat ImageProcessingStrategy::applySubs(Mat raw_src, Mat ref_src){
+Mat IPS_with_opencl::applySubs(Mat raw_src, Mat ref_src){
     Mat dst = raw_src.clone();
     absdiff(raw_src,ref_src,dst);
     return dst;
 }
 
-Mat ImageProcessingStrategy::applyContourns(Mat src){
+Mat IPS_with_opencl::applyContourns(Mat src){
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
     RNG rng(12345);
@@ -83,7 +97,7 @@ Mat ImageProcessingStrategy::applyContourns(Mat src){
 }
 
 
-int ImageProcessingStrategy::processBlur(){
+int IPS_with_opencl::processBlur(){
     //Raw Image
     Mat src = imread( Constants::IMG_RAW_LAPLACE );
     if (!src.data) return 1;
@@ -98,7 +112,7 @@ int ImageProcessingStrategy::processBlur(){
     return 0;
 }
 
-int ImageProcessingStrategy::processLaplacian(){
+int IPS_with_opencl::processLaplacian(){
     //Raw Image
     Mat src = imread( Constants::IMG_RAW );
     if (!src.data) return 1;
@@ -113,7 +127,7 @@ int ImageProcessingStrategy::processLaplacian(){
     return 0;
 }
 
-int ImageProcessingStrategy::processEdge(){
+int IPS_with_opencl::processEdge(){
      Mat src = imread( Constants::IMG_SUBS );
      if (!src.data) return 1;
      Mat dst = applyEdge(src);
@@ -121,7 +135,7 @@ int ImageProcessingStrategy::processEdge(){
     return 0;
 }
 
-int ImageProcessingStrategy::processSubs(){
+int IPS_with_opencl::processSubs(){
     Mat src_raw = imread( Constants::IMG_RAW_BLUR );
     Mat src_ref = imread( Constants::IMG_REF_BLUR );
     if (!src_raw.data || !src_ref.data) return 1;
@@ -129,7 +143,7 @@ int ImageProcessingStrategy::processSubs(){
     imwrite( Constants::IMG_SUBS, dst );
 }
 
-int ImageProcessingStrategy::processContourns(){
+int IPS_with_opencl::processContourns(){
     Mat src = imread( Constants::IMG_EDGES );
     if (!src.data) return 1;
     Mat dst = applyContourns(src);

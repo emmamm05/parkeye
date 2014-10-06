@@ -1,14 +1,9 @@
-#include "samples/canny_detector.h"
-#include "samples/background_subtraction.h"
-#include "samples/smoothing.h"
-#include "samples/laplace.h"
 #include "constants.h"
-#include "imageprocessingstrategy.h"
-#include <stdio.h>
-#include <time.h>
-#include <cmath>
+#include "ips_simple.h"
+#include "ips_with_opencl.h"
 
-ImageProcessingStrategy* strategy = new ImageProcessingStrategy();
+IPS_simple* strategy = new IPS_simple();
+//IPS_with_opencl* strategy = new IPS_with_opencl();
 
 void step(){
 
@@ -58,6 +53,15 @@ void step(){
 //pasar como argumento el path completo de la imagen lana.jpg
 int main( int argc, char** argv )
 {
+    //cleaning
+    std::remove(Constants::IMG_RAW_BLUR);
+    std::remove(Constants::IMG_RAW_LAPLACE);
+    std::remove(Constants::IMG_REF_BLUR);
+    std::remove(Constants::IMG_REF_LAPLACE);
+    std::remove(Constants::IMG_SUBS);
+    std::remove(Constants::IMG_EDGES);
+    std::remove(Constants::IMG_CONTOURNS);
+    std::remove(Constants::IMG_FINAL);
 
 
     printf("Begin creating ocl context...\n");

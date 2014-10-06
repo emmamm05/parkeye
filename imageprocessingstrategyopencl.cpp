@@ -10,8 +10,16 @@ ImageProcessingStrategy::ImageProcessingStrategy()
 Mat ImageProcessingStrategy::applyBlur(Mat src){
     Mat dst = src.clone();
 
-    GaussianBlur( src, dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
+    printf("OOKOKO");
 
+    /* cv::Mat --> cv::ocl::oclMat */
+    ocl::oclMat oclmat_src(src);
+    ocl::oclMat oclmat_dst;
+
+    //ocl::GaussianBlur( oclmat_src, oclmat_dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
+
+    /* cv::Mat <-- cv::ocl::oclMat */
+    oclmat_dst.download(dst);
     return dst;
 }
 

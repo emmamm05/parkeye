@@ -1,13 +1,11 @@
-#include "imageprocessingstrategy.h"
-#include "constants.h"
-#include "QDebug"
-#include <math.h>
+#include "ips_simple.h"
 
-ImageProcessingStrategy::ImageProcessingStrategy()
+IPS_simple::IPS_simple()
 {
 }
 
-Mat ImageProcessingStrategy::applyBlur(Mat src){
+
+Mat IPS_simple::applyBlur(Mat src){
     Mat dst = src.clone();
 
     GaussianBlur( src, dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
@@ -15,26 +13,26 @@ Mat ImageProcessingStrategy::applyBlur(Mat src){
     return dst;
 }
 
-Mat ImageProcessingStrategy::applyLaplacian(Mat src){
+Mat IPS_simple::applyLaplacian(Mat src){
     Mat dst = src.clone();
     Laplacian( src, dst, Constants::LAPLACE_DDEPTH, Constants::LAPLACE_KERNEL_SIZE, Constants::LAPLACE_SCALE,
                Constants::LAPLACE_DELTA, BORDER_DEFAULT );
     return dst;
 }
 
-Mat ImageProcessingStrategy::applyEdge(Mat src){
+Mat IPS_simple::applyEdge(Mat src){
     Mat dst = src.clone();
     Canny( src, dst, Constants::EDGES_LOW_THRESHOLD, Constants::EDGES_LOW_THRESHOLD*Constants::EDGES_RATIO, Constants::EDGES_KERNEL_SIZE );
     return dst;
 }
 
-Mat ImageProcessingStrategy::applySubs(Mat raw_src, Mat ref_src){
+Mat IPS_simple::applySubs(Mat raw_src, Mat ref_src){
     Mat dst = raw_src.clone();
     absdiff(raw_src,ref_src,dst);
     return dst;
 }
 
-Mat ImageProcessingStrategy::applyContourns(Mat src){
+Mat IPS_simple::applyContourns(Mat src){
     vector<vector<Point> > contours;
     vector<Vec4i> hierarchy;
     RNG rng(12345);
@@ -83,7 +81,7 @@ Mat ImageProcessingStrategy::applyContourns(Mat src){
 }
 
 
-int ImageProcessingStrategy::processBlur(){
+int IPS_simple::processBlur(){
     //Raw Image
     Mat src = imread( Constants::IMG_RAW_LAPLACE );
     if (!src.data) return 1;
@@ -98,7 +96,7 @@ int ImageProcessingStrategy::processBlur(){
     return 0;
 }
 
-int ImageProcessingStrategy::processLaplacian(){
+int IPS_simple::processLaplacian(){
     //Raw Image
     Mat src = imread( Constants::IMG_RAW );
     if (!src.data) return 1;
@@ -113,7 +111,7 @@ int ImageProcessingStrategy::processLaplacian(){
     return 0;
 }
 
-int ImageProcessingStrategy::processEdge(){
+int IPS_simple::processEdge(){
      Mat src = imread( Constants::IMG_SUBS );
      if (!src.data) return 1;
      Mat dst = applyEdge(src);
@@ -121,7 +119,7 @@ int ImageProcessingStrategy::processEdge(){
     return 0;
 }
 
-int ImageProcessingStrategy::processSubs(){
+int IPS_simple::processSubs(){
     Mat src_raw = imread( Constants::IMG_RAW_BLUR );
     Mat src_ref = imread( Constants::IMG_REF_BLUR );
     if (!src_raw.data || !src_ref.data) return 1;
@@ -129,7 +127,7 @@ int ImageProcessingStrategy::processSubs(){
     imwrite( Constants::IMG_SUBS, dst );
 }
 
-int ImageProcessingStrategy::processContourns(){
+int IPS_simple::processContourns(){
     Mat src = imread( Constants::IMG_EDGES );
     if (!src.data) return 1;
     Mat dst = applyContourns(src);

@@ -12,6 +12,8 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
+QMAKE_MAC_SDK = macosx10.9
 
 SOURCES += \
     main.cpp \
@@ -19,19 +21,21 @@ SOURCES += \
     samples/smoothing.cpp \
     samples/laplace.cpp \
     samples/background_subtraction.cpp \
-    imageprocessingstrategy.cpp \
     constants.cpp \
-    samples/contours.cpp
+    samples/contours.cpp \
+    ips_with_opencl.cpp \
+    ips_simple.cpp
 
+INCLUDEPATH += /usr/local/include/opencv
+INCLUDEPATH += /usr/local/include/opencv2
 
-## OpenCV settings for Unix/Linux
-unix:!mac {
-    message("* Using settings for Unix/Linux.")
-    INCLUDEPATH += /usr/local/include/opencv
-    INCLUDEPATH += /usr/local/include/opencv2
+LIBS += -L/usr/local/lib \
+        -lopencv_core \
+        -lopencv_highgui \
+        -lopencv_imgproc \
+        -lopencv_ocl \
+        -lopencv_nonfree
 
-    LIBS += `pkg-config opencv --cflags --libs`
-}
 
 HEADERS += \
     samples/canny_detector.h \
@@ -40,8 +44,9 @@ HEADERS += \
     samples/background_subtraction.h \
     imageprocessingstrategy.h \
     constants.h \
-    samples/contours.h
+    samples/contours.h \
+    ips_with_opencl.h \
+    ips_simple.h
 
 FORMS += \
     mainwindow.ui
-

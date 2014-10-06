@@ -16,7 +16,7 @@ int lowThreshold=80;
 int const max_lowThreshold = 100;
 int size_blur=0;
 int const max_size_blur = 10;
-int ratio = 3;
+int ratio_ = 3;
 int kernel_size = 3;
 const char* cd_window_name = "Edge Map";
 
@@ -31,8 +31,8 @@ static void CannyThreshold(int, void*)
     blur( src_gray2, detected_edges2, Size(size_blur+1,size_blur+1) );
 
     /// Canny detector
-    Canny( detected_edges1, detected_edges1, lowThreshold, lowThreshold*ratio, kernel_size );
-    Canny( detected_edges2, detected_edges2, lowThreshold, lowThreshold*ratio, kernel_size );
+    Canny( detected_edges1, detected_edges1, lowThreshold, lowThreshold*ratio_, kernel_size );
+    Canny( detected_edges2, detected_edges2, lowThreshold, lowThreshold*ratio_, kernel_size );
 
     /// Using Canny's output as a mask, we display our result
     cd_dst1 = Scalar::all(0);
