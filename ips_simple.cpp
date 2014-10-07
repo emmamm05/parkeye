@@ -1,7 +1,5 @@
 #include "ips_simple.h"
 
-struct timespec startSimple, stopSimple;
-
 IPS_simple::IPS_simple()
 {
 }
@@ -10,11 +8,11 @@ IPS_simple::IPS_simple()
 Mat IPS_simple::applyBlur(Mat src){
     Mat dst = src.clone();
 
-    clock_gettime( CLOCK_REALTIME, &startSimple);
+    clock_t startStep = clock();
     GaussianBlur( src, dst, Size( Constants::BLUR_KERNEL_LENGTH, Constants::BLUR_KERNEL_LENGTH ), 0, 0 );
-    clock_gettime( CLOCK_REALTIME, &stopSimple);
-    double elapsedStep = (double)( stopSimple.tv_sec - startSimple.tv_sec )+ ( stopSimple.tv_nsec - startSimple.tv_nsec );
-    printf("Tiempo de ejecucion de GaussianBlur:\t%f\tns \n", std::abs(elapsedStep) );
+    clock_t stopStep = clock();
+    double elapsedStep = (double)difftime(startStep, stopStep) * 1000.0 / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecucion de GaussianBlur:\t%f\tms \n", std::abs(elapsedStep) );
 
     return dst;
 }
@@ -22,12 +20,12 @@ Mat IPS_simple::applyBlur(Mat src){
 Mat IPS_simple::applyLaplacian(Mat src){
     Mat dst = src.clone();
 
-    clock_gettime( CLOCK_REALTIME, &startSimple);
+    clock_t startStep = clock();
     Laplacian( src, dst, Constants::LAPLACE_DDEPTH, Constants::LAPLACE_KERNEL_SIZE, Constants::LAPLACE_SCALE,
                Constants::LAPLACE_DELTA, BORDER_DEFAULT );
-    clock_gettime( CLOCK_REALTIME, &stopSimple);
-    double elapsedStep = (double)( stopSimple.tv_sec - startSimple.tv_sec )+ ( stopSimple.tv_nsec - startSimple.tv_nsec );
-    printf("Tiempo de ejecucion de Laplacian:\t%f\tns \n", std::abs(elapsedStep) );
+    clock_t stopStep = clock();
+    double elapsedStep = (double)difftime(startStep, stopStep) * 1000.0 / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecucion de Laplacian:\t%f\tms \n", std::abs(elapsedStep) );
 
     return dst;
 }

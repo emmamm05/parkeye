@@ -43,7 +43,6 @@ void step(){
 //pasar como argumento el path completo de la imagen lana.jpg
 int main( int argc, char** argv )
 {
-    struct timespec startProgram, stopProgram;
 
     //cleaning
     std::remove(Constants::IMG_RAW_BLUR);
@@ -70,15 +69,15 @@ int main( int argc, char** argv )
     printf("End creating ocl context...\n");
 	/*	*/
     printf("inicio de la ejecucion\n");
-    clock_gettime( CLOCK_REALTIME, &startProgram);
+    clock_t startProgram = clock();
 
     int i;
     for ( i=0; i<6; i++){
         step();
     }
 
-    clock_gettime( CLOCK_REALTIME, &stopProgram);
-    double elapsedStep = (double)( stopProgram.tv_sec - startProgram.tv_sec )+ ( stopProgram.tv_nsec - startProgram.tv_nsec );
-    printf("Tiempo de ejecucion de total:\t%f\tns \n", std::abs(elapsedStep) );
+    clock_t stopProgram = clock();
+    double elapsedProgram = (double)difftime(startProgram, stopProgram) * 1000.0 / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecucion TOTAL:\t\t%f\tms \n", std::abs(elapsedProgram) );
     printf("fin  de la ejecucion\n");
 }
