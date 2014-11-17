@@ -24,7 +24,8 @@ SOURCES += \
     constants.cpp \
     samples/contours.cpp \
     ips_with_opencl.cpp \
-    ips_simple.cpp
+    ips_simple.cpp \
+    ips_with_cuda.cpp
 
 INCLUDEPATH += /usr/local/include/opencv
 INCLUDEPATH += /usr/local/include/opencv2
@@ -46,7 +47,8 @@ HEADERS += \
     constants.h \
     samples/contours.h \
     ips_with_opencl.h \
-    ips_simple.h
+    ips_simple.h \
+    ips_with_cuda.h
 
 FORMS += \
     mainwindow.ui
