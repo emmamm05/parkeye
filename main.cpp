@@ -1,9 +1,10 @@
 #include "constants.h"
 #include "ips_simple.h"
 #include "ips_with_opencl.h"
+#include <unistd.h>
 
-IPS_simple* strategy = new IPS_simple();
-//IPS_with_opencl* strategy = new IPS_with_opencl();
+//IPS_simple* strategy = new IPS_simple();
+IPS_with_opencl* strategy = new IPS_with_opencl();
 
 struct timespec start, stop;
 
@@ -25,7 +26,7 @@ void step(){
             Constants::STEP_STATE = Constants::BLUR;
             break;
         case Constants::EDGES:
-            strategy->processEdge();
+            //strategy->processEdge();
             //next state
             Constants::STEP_STATE = Constants::CONTOURNS;
             break;
@@ -35,7 +36,7 @@ void step(){
             Constants::STEP_STATE = Constants::EDGES;
             break;
         case Constants::CONTOURNS:
-            strategy->processContourns();
+            //strategy->processContourns();
             break;
     }
 }
@@ -43,18 +44,6 @@ void step(){
 //pasar como argumento el path completo de la imagen lana.jpg
 int main( int argc, char** argv )
 {
-
-    //cleaning
-    std::remove(Constants::IMG_RAW_BLUR);
-    std::remove(Constants::IMG_RAW_LAPLACE);
-    std::remove(Constants::IMG_REF_BLUR);
-    std::remove(Constants::IMG_REF_LAPLACE);
-    std::remove(Constants::IMG_SUBS);
-    std::remove(Constants::IMG_EDGES);
-    std::remove(Constants::IMG_CONTOURNS);
-    std::remove(Constants::IMG_FINAL);
-
-
     printf("Begin creating ocl context...\n");
 
     // Platform Info
@@ -67,12 +56,21 @@ int main( int argc, char** argv )
 
     ocl::setDevice(param[0]);
     printf("End creating ocl context...\n");
-	/*	*/
+    std::remove(Constants::IMG_RAW_BLUR);
+    std::remove(Constants::IMG_RAW_LAPLACE);
+    std::remove(Constants::IMG_REF_BLUR);
+    std::remove(Constants::IMG_REF_LAPLACE);
+    std::remove(Constants::IMG_SUBS);
+    std::remove(Constants::IMG_EDGES);
+    std::remove(Constants::IMG_CONTOURNS);
+    std::remove(Constants::IMG_FINAL);
+
+    /*	*/
     printf("inicio de la ejecucion\n");
     clock_t startProgram = clock();
 
-    int i;
-    for ( i=0; i<6; i++){
+
+    for ( int j=0; j<6; j++){
         step();
     }
 
@@ -80,4 +78,5 @@ int main( int argc, char** argv )
     double elapsedProgram = (double)difftime(startProgram, stopProgram) * 1000.0 / CLOCKS_PER_SEC;
     printf("Tiempo de ejecucion TOTAL:\t\t%f\tms \n", std::abs(elapsedProgram) );
     printf("fin  de la ejecucion\n");
+
 }

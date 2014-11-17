@@ -14,6 +14,8 @@ Mat IPS_simple::applyBlur(Mat src){
     double elapsedStep = (double)difftime(startStep, stopStep) * 1000.0 / CLOCKS_PER_SEC;
     printf("Tiempo de ejecucion de GaussianBlur:\t%f\tms \n", std::abs(elapsedStep) );
 
+
+
     return dst;
 }
 
@@ -32,13 +34,23 @@ Mat IPS_simple::applyLaplacian(Mat src){
 
 Mat IPS_simple::applyEdge(Mat src){
     Mat dst = src.clone();
-    Canny( src, dst, Constants::EDGES_LOW_THRESHOLD, Constants::EDGES_LOW_THRESHOLD*Constants::EDGES_RATIO, Constants::EDGES_KERNEL_SIZE );
+    Mat src_gray = src.clone();
+    //cvtColor( src, src_gray, COLOR_BGR2GRAY );
+    clock_t startStep = clock();
+    Canny( src_gray, dst, Constants::EDGES_LOW_THRESHOLD, Constants::EDGES_LOW_THRESHOLD*Constants::EDGES_RATIO, Constants::EDGES_KERNEL_SIZE );
+    clock_t stopStep = clock();
+    double elapsedStep = (double)difftime(startStep, stopStep) * 1000.0 / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecucion de Canny Edges:\t%f\tms \n", std::abs(elapsedStep) );
     return dst;
 }
 
 Mat IPS_simple::applySubs(Mat raw_src, Mat ref_src){
     Mat dst = raw_src.clone();
+    clock_t startStep = clock();
     absdiff(raw_src,ref_src,dst);
+    clock_t stopStep = clock();
+    double elapsedStep = (double)difftime(startStep, stopStep) * 1000.0 / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecucion de Substraction:\t%f\tms \n", std::abs(elapsedStep) );
     return dst;
 }
 
@@ -55,15 +67,6 @@ Mat IPS_simple::applyContourns(Mat src){
     // Eliminar ruido
     src2 = applyBlur(src_gray);
     findContours( src2, contours, hierarchy,CV_CHAIN_APPROX_SIMPLE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-
-    // iterate through all the top-level contours,
-       // draw each connected component with its own random color
-//       int idx = 0;
-//       for( ; idx >= 0; idx = hierarchy[idx][0] )
-//       {
-//           Scalar color( rand()&255, rand()&255, rand()&255 );
-//           drawContours( dst, contours, idx, color, CV_FILLED, 1, hierarchy );
-//       }
 
     qDebug() << contours.data();
     // Rotar los rectangulos buscando el area minima
