@@ -2,6 +2,7 @@
 #include "ips_simple.h"
 #include "ips_with_opencl.h"
 #include <unistd.h>
+#include <stdio.h>
 
 //IPS_simple* strategy = new IPS_simple();
 IPS_with_opencl* strategy = new IPS_with_opencl();
@@ -56,14 +57,14 @@ int main( int argc, char** argv )
 
     ocl::setDevice(param[0]);
     printf("End creating ocl context...\n");
-    std::remove(Constants::IMG_RAW_BLUR);
-    std::remove(Constants::IMG_RAW_LAPLACE);
-    std::remove(Constants::IMG_REF_BLUR);
-    std::remove(Constants::IMG_REF_LAPLACE);
-    std::remove(Constants::IMG_SUBS);
-    std::remove(Constants::IMG_EDGES);
-    std::remove(Constants::IMG_CONTOURNS);
-    std::remove(Constants::IMG_FINAL);
+    remove(Constants::IMG_RAW_BLUR);
+    remove(Constants::IMG_RAW_LAPLACE);
+    remove(Constants::IMG_REF_BLUR);
+    remove(Constants::IMG_REF_LAPLACE);
+    remove(Constants::IMG_SUBS);
+    remove(Constants::IMG_EDGES);
+    remove(Constants::IMG_CONTOURNS);
+    remove(Constants::IMG_FINAL);
 
     /*	*/
     printf("inicio de la ejecucion\n");
