@@ -1,11 +1,11 @@
 #include "constants.h"
 #include "ips_simple.h"
-#include "ips_with_opencl.h"
+#include "ips_with_cuda.h"
 #include <unistd.h>
 #include <stdio.h>
 
-//IPS_simple* strategy = new IPS_simple();
-IPS_with_opencl* strategy = new IPS_with_opencl();
+IPS_simple* strategy = new IPS_simple();
+//IPS_with_cuda* strategy = new IPS_with_cuda();
 
 struct timespec start, stop;
 

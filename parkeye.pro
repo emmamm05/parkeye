@@ -31,12 +31,14 @@ INCLUDEPATH += /usr/local/include/opencv
 INCLUDEPATH += /usr/local/include/opencv2
 
 LIBS += -L/usr/local/lib \
+	-lX11 \
         -lopencv_core \
         -lopencv_highgui \
         -lopencv_imgproc \
-        -lopencv_ocl \
-        -lopencv_nonfree
-
+       	-lopencv_ocl \
+	-lopencv_gpu \
+        -lopencv_nonfree \
+	-lopencv_features2d
 
 HEADERS += \
     samples/canny_detector.h \
