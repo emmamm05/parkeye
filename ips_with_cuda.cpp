@@ -31,7 +31,7 @@ Mat IPS_with_cuda::applyLaplacian(Mat src){
     gpu::GpuMat GpuMat_dst;
     clock_t startStep = clock();
     gpu::Laplacian( GpuMat_src, GpuMat_dst, Constants::LAPLACE_DDEPTH, Constants::LAPLACE_KERNEL_SIZE, Constants::LAPLACE_SCALE,
-               Constants::LAPLACE_DELTA, BORDER_DEFAULT );
+               BORDER_DEFAULT );
     clock_t stopStep = clock();
     double elapsedStep = (double)difftime(startStep, stopStep) * 1000.0 / CLOCKS_PER_SEC;
     printf("Tiempo de ejecucion de Laplacian:\t%f\tms \n", std::abs(elapsedStep) );
